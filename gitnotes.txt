@@ -1,0 +1,29 @@
+Working Tree
+- README.md
+- SystemBla
+- OtherFolder
+- OtherFolder/Foo.txt  # change 2 lines
+
+Staging Area (git add)
+# added 2 lines to foo.txt
+
+Commits (git commit)
+Added more information about the project
+
+
+origin commit1 commit2 commit4
+
+local commit1 commit2 commit3
+
+git push
+Can't push, conflict
+
+git push --force
+origin commit1 commit2 commit3
+
+git pull (which was, git fetch && git merge)
+git status (both modified, merge conflict)
+git add
+git commit -m "Fixed conflict"
+local commit1 commit2 commit4 commit3
+git push
