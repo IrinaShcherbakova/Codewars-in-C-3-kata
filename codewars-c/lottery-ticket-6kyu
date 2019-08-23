@@ -1,0 +1,31 @@
+typedef struct mini_win_t
+{
+    char    *letters;
+    unsigned code;
+} MiniWin;
+
+typedef struct ticket_t
+{
+    MiniWin *mini_wins;
+    unsigned count;
+} Ticket;
+
+const char *bingo(const Ticket *ticket, unsigned win)
+{
+    int ticket_length = ticket->count;
+    int total = 0;
+    for(int i = 0; i < ticket_length; i++){
+        for(int j = 0; j < strlen(ticket->mini_wins[i].letters); j++){
+            int value = ticket->mini_wins[i].letters[j];
+            if(value == ticket->mini_wins[i].code){
+                total++;
+                break;
+            }
+        }
+    }
+
+    if(total >= win)
+        return "Winner!";
+
+    return "Loser!";
+}
