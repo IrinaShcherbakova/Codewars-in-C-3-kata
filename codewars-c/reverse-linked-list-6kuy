@@ -1,0 +1,40 @@
+#include <stddef.h>
+
+struct Node
+{
+    int value;
+    struct Node *next;
+};
+
+struct Node * reverse_list(struct Node *node)
+{
+    // Reverse the list that starts with 'node' and return the first node of the reversed list.
+    // Do the reversal in-place, i.e. do not create new nodes.
+    
+    if(node == NULL)
+        return NULL;
+    
+    struct Node *a = node;
+    struct Node *b = a->next;
+    if(b == NULL){
+        return a;
+    }
+    struct Node *c = b->next;
+    if(c == NULL){
+        b->next = a;
+        a->next = NULL;
+        return b;
+    }
+
+    a->next = NULL;
+    while(c != NULL){
+        b->next = a;
+        a = b;
+        b = c;
+        c = c->next;
+
+    }
+
+    b->next = a;
+    return b;
+}
