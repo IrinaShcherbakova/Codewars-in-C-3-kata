@@ -1,0 +1,17 @@
+long solve(const char *str, size_t inx)
+{
+    if(str[inx] != '(')
+        return -1;
+
+    long open = 1;
+    for(size_t i = inx + 1; i < strlen(str); i++){
+        if(str[i] == '(')
+            open++;
+        if(str[i] == ')')
+            open--;
+        if(open == 0)
+            return i;
+    }
+}
+
+
