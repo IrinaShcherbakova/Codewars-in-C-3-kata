@@ -1,0 +1,16 @@
+#include <stdio.h>
+char *alphabet_position(char *text) {
+    
+    char* res = calloc(strlen(text) * 2, sizeof(char));
+    memset(res, '\0', sizeof(res));
+
+    for(int i = 0; i < strlen(text); i++){
+        if(isalpha(text[i])){
+            int value = tolower(text[i]) - 96;
+            sprintf(res + strlen(res), "%d ", value);
+        }
+    }
+
+    res[strlen(res) - 1] = '\0';
+    return res;
+}
