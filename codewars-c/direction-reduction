@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <malloc.h>
+#include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <inttypes.h>
+
+char** dirReduc(char** arr, int sz, int* lg);
+int isRedundant(char* str1, char* str2);
+
+int main() {
+
+    char* d1[4] = {"EAST", "SOUTH", "NORTH", "SOUTH"};
+    //dotest(d1, 7,  "{WEST}");
+    char* expr = "{WEST}";
+    int lg = -1;
+    char** act = dirReduc(d1, 4,  &lg);
+    //printf("Expected:\n%s\nGot:\n%s\n", expr, act);
+
+    for(int i = 0; i < lg; i++){
+        printf("%s ", act[i]);
+    }
+
+
+    //printf("Result is %c\n", res);
+
+
+    //free(result);
+    return 0;
+}
+
+char** dirReduc(char** arr, int sz, int* lg) {
+
+    int changed = 0;
+
+    while(true) {
+        for (int i = 0; i < sz-1; i++) {
+
+            if(isRedundant(arr[i], arr[i+1])){
+                int index = 0;
+                for (int j = 0; j < sz; j++) {
+                    if (i == j || i + 1 == j)
+                        continue;
+                    arr[index] = arr[j];
+                    index++;
+                }
+                changed = 1;
+                sz -= 2;
+            }
+        }
+        if (changed == 1)
+            changed = 0;
+        else
+            break;
+    }
+
+    *lg = sz;
+    char** result = malloc (sz * sizeof(char*));
+
+    for(int i = 0; i < sz; i++)
+        result[i] = arr[i];
+
+    return result;
+}
+
+int isRedundant(char* str1, char* str2){
+
+    if(str1[0] == 'N' & str2[0] == 'S') {
+        printf("str1 is %s, str2 is %s, return true\n", str1, str2);
+        return 1;
+    }
+    else if(str1[0] == 'S' & str2[0] == 'N'){
+        printf("str1 is %s, str2 is %s, return true\n", str1, str2);
+        return 1;
+    }
+    else if(str1[0] == 'E' & str2[0] == 'W'){
+        printf("str1 is %s, str2 is %s, return true\n", str1, str2);
+        return 1;
+    }
+    else if(str1[0] == 'W' & str2[0] == 'E'){
+        printf("str1 is %s, str2 is %s, return true\n", str1, str2);
+        return 1;
+    }
+    else {
+        printf("str1 is %s, str2 is %s, return false\n", str1, str2);
+        return 0;
+    }
+}
+
+
+
