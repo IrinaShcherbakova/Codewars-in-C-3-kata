@@ -1,0 +1,50 @@
+char *alphabet_war(const char *fight)
+{
+    char *input = strdup(fight);
+    int left_score = 0;
+    int right_score = 0;
+
+    for(int i = 0; i < strlen(input); i++){
+        if(input[i] == '*'){
+            if(input[i-1])
+                input[i-1] = '0';
+            if(input[i+1] && input[i+1] != '*')
+                input[i+1] = '0';
+        }
+    }
+
+    for(int i = 0; i < strlen(input); i++){
+        switch(input[i]){
+            case 's':
+                left_score += 1;
+                break;
+            case 'b':
+                left_score += 2;
+                break;
+            case 'p':
+                left_score += 3;
+                break;
+            case 'w':
+                left_score += 4;
+                break;
+            case 'z':
+                right_score += 1;
+                break;
+            case 'd':
+                right_score += 2;
+                break;
+            case 'q':
+                right_score += 3;
+                break;
+            case 'm':
+                right_score += 4;
+                break;
+            default:
+                break;
+        }
+    }
+
+    free(input);
+    return (left_score == right_score ? "Let's fight again!" :
+            left_score < right_score ? "Right side wins!" : "Left side wins!");
+}
