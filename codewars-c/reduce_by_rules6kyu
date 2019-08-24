@@ -1,0 +1,29 @@
+typedef double (*rulesFnct) (double, double);
+
+double reduceByRules(double numbers[], int numberCount, rulesFnct rules[], int rulesCount)
+{
+    double result = 0;
+    int i = 0;
+    int j = 0;
+
+    while(i < numberCount){
+
+        if(j == rulesCount)
+            j = 0;
+
+        if( i == 0){
+            result = rules[j](numbers[i], numbers[i+1]);
+            //printf("result in first iter is %f \n", result);
+            j++;
+            i +=2;
+            continue;
+        }
+
+        result = rules[j](result, numbers[i]);
+        //printf("result is %f \n", result);
+        j++;
+        i++;
+    }
+    
+    return result;
+}
