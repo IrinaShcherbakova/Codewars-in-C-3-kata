@@ -1,0 +1,107 @@
+char code_letter(char value, int shift);
+char decode_letter(char value, int shift);
+
+// returned array will be freed
+char** movingShift(char* strng, int shift) {
+
+    printf("To code:\n%s  || shift %d\n", strng, shift);
+    int length = strlen(strng) + 1;
+    char* coded_string = calloc(length, sizeof(char));
+    coded_string[length - 1] = '\0';
+    for(int i = 0; i < strlen(strng); i++, shift++){
+        if(isalpha(strng[i])){
+            char letter = code_letter(strng[i], shift);
+            coded_string[i] = letter;
+        }
+        else
+            coded_string[i] = strng[i];
+    }
+
+
+    char **res = calloc(5, sizeof(char*));
+    int unit_length = ceil((double)(length-1) / 5);
+    int units[5] = {0};
+    int filled = 0;
+    for(int i = 0; i < 5; i ++){
+        if(filled + unit_length < (length - 1)) {
+            units[i] = unit_length;
+            filled += unit_length;
+        }
+        else{
+            units[i] = length - 1 - filled;
+            filled +=units[i];
+        }
+        res[i] = calloc(unit_length + 1, sizeof(char));
+        memset(res[i], '\0', sizeof(res[i]));
+    }
+
+    filled = 0;
+    for(int i = 0; i < 5; i++){
+        strncpy(res[i], coded_string + filled, units[i]);
+        filled += units[i];
+    }
+
+    free(coded_string);
+    return res;
+}
+
+char code_letter(char value, int shift){
+    if(islower(value)){
+        while(value + shift > 122){
+            shift = shift - (123 - value);
+            value = 'a';
+        }
+        return value + shift;
+    }
+    else{
+        while(value + shift > 90){
+            shift = shift - (91 - value);
+            value = 'A';
+        }
+        return value + shift;
+    }
+}
+
+// returned string will be freed
+char* demovingShift(char** s, int shift) {
+    
+    printf("To decode:\n%s%s%s%s%s\n", s[0],s[1],s[2],s[3],s[4]);
+    char *res = calloc(1, sizeof(char));
+    int res_length = 1;
+    int i = 0;
+    int res_index = 0;
+
+    while(i < 5){
+
+        res_length += strlen(s[i]);
+        res = (char*)realloc(res, (res_length) * sizeof(char));
+        for(int j = 0; j < strlen(s[i]); j++, shift++){
+            if(isalpha(s[i][j]))
+                res[res_index++] = decode_letter(s[i][j], shift);
+            else
+                res[res_index++] = s[i][j];
+        }
+        i++;
+
+    }
+
+    res[res_length - 1] = '\0';
+    return res;
+}
+
+char decode_letter(char value, int shift){
+    if(islower(value)){
+        while(value - shift < 97){
+            shift = shift - (value - 96);
+            value = 'z';
+        }
+        return value - shift;
+    }
+    else{
+        while(value - shift < 65){
+            shift = shift - (value - 64);
+            value = 'Z';
+        }
+        return value - shift;
+    }
+}
