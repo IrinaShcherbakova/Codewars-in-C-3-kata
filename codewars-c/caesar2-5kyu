@@ -1,0 +1,83 @@
+// results will be freed
+char code_letter(char value, int shift){
+    if(islower(value)){
+        while(value + shift > 122){
+            shift = shift - (123 - value);
+            value = 'a';
+        }
+        return value + shift;
+    }
+    else{
+        while(value + shift > 90){
+            shift = shift - (91 - value);
+            value = 'A';
+        }
+        return value + shift;
+    }
+}
+
+char** encode(char* strng, int shift, int* lg) {
+    
+    int length = strlen(strng) + 2;
+    int unit_length = ceil((double)length/5);
+    int units[5] = {0};
+    int filled = 0;
+    *lg = 0;
+    for(int i = 0; i < 5; i ++){
+        if(length - filled == 0)
+            break;
+        if(filled + unit_length < length)
+            units[i] = unit_length;
+        else
+            units[i] = length  - filled;
+        filled += units[i];
+        (*lg)++;
+    }
+
+    char **res = (char**)calloc(*lg, sizeof(char*));
+    for(int i = 0; i < *lg; i++){
+        res[i] = calloc(units[i] + 1, sizeof(char));
+        memset(res[i], '\0', sizeof(res[i]));
+    }
+
+    res[0][0] = tolower(strng[0]);
+    res[0][1] =  code_letter(res[0][0], shift);
+    int index = 0;
+
+    for(int i = 0; i < *lg; i++){
+        int j = (i == 0 ? 2 : 0);
+        for(j; j < units[i]; j++, index++){
+            if(isalpha(strng[index]))
+                res[i][j] = code_letter(strng[index], shift);
+            else
+                res[i][j] = strng[index];
+        }
+    }
+
+    return res;
+
+}
+
+char* decode(char** s, int sz) {
+    
+    int length = 1;
+    for(int i = 0; i < sz; i++)
+        length += strlen(s[i]);
+
+    char *res = calloc(length, sizeof(char));
+    memset(res, '\0', sizeof(res));
+
+    int shift = s[0][0] - s[0][1];
+    int index = 0;
+    for(int i = 0; i < sz; i++){
+        int j = (i == 0 ? 2 : 0);
+        for(j; j < strlen(s[i]); j++, index++){
+            if(isalpha(s[i][j]))
+                res[index] = code_letter(s[i][j], shift);
+            else
+                res[index] = s[i][j];
+        }
+    }
+
+    return res;
+ }
