@@ -1,0 +1,73 @@
+int leap_year (int year){
+
+    if(year <= 1752)
+        return (year % 4 == 0 ? 1 : 0);
+
+    if(year % 400 == 0)
+        return 1;
+
+    if(year % 100 == 0)
+        return 0;
+
+    return year % 4 == 0 ? 1 : 0;
+
+}
+
+int days(int date, int month, int year){
+
+    int total_days = 0;
+    const int current_year = 2437;
+    const int days_in_current_year = 83; //jan + feb + 24 days of march
+    const int days_in_months[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    const int change_year = 1752;
+
+    if(year == current_year){
+        int born_this_year = 0;
+        for(int i = 0; i < month - 1; i++)
+            born_this_year += days_in_months[i];
+        born_this_year +=  date;
+        return days_in_current_year - born_this_year;
+    }
+    
+    //calculate amount of days in  given year
+    if(year < current_year) {
+        for (int i = month; i < 12; i++) {
+            if (i == 1 && leap_year(year))
+                total_days += (days_in_months[i] + 1);
+            else if (i == 8 && year == 1752)
+                total_days += (days_in_months[i] - 11);  //remove days from September 1752
+            else
+                total_days += days_in_months[i];
+        }
+
+        //add days of given month
+        if (month == 2 && leap_year(year))
+            total_days += (days_in_months[month - 1] - date + 1);
+        else if (month == 9 && year == 1752) {
+            if(date <= 2)
+                total_days += (days_in_months[month - 1] - 11 - date);  //remove days from September 1752
+            else
+                total_days += (days_in_months[month - 1] - date);
+        }
+        else
+            total_days += (days_in_months[month - 1] - date);
+
+        //add days of current year
+        total_days += days_in_current_year;
+        year++;
+        //subtract 11 days of September 1752
+        if(change_year > year)
+            total_days -= 11;
+    }
+
+    //calculate difference in days b/wm years
+    while(year < current_year){
+        if(leap_year(year))
+            total_days += 366;
+        else
+            total_days +=365;
+        year++;
+    }
+    
+    return total_days;
+}
