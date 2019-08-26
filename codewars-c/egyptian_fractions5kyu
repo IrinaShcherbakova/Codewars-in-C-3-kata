@@ -1,0 +1,103 @@
+#include <stddef.h>
+char* write_operand(long long number);  //return part of string
+long long find_common_divisor(long long nominator, long long denominator);
+
+char* decompose(char* nrStr, char* drStr) {
+    
+    char *res = calloc(1, sizeof(char));
+    res[0] = '\0';
+    int res_length = 1;
+    char *end = NULL;
+    long long nominator = strtoll(nrStr, end, 10);
+    long long denominator = strtoll(drStr, end, 10);
+
+    if(nominator == 0)
+        return res;
+
+    if(nominator % denominator == 0){
+        int length = snprintf(NULL, 0, "%d", (nominator/denominator));
+        res_length += length;
+        res = (char*)realloc(res, res_length * sizeof(char));
+        sprintf(res, "%d", (nominator/denominator));
+        res[length] = '\0';
+        return res;
+    }
+
+
+    if(nominator > denominator){
+        int length = snprintf(NULL, 0, "%d,", (nominator/denominator));
+        res_length += length;
+        res = (char*)realloc(res, res_length * sizeof(char));
+        sprintf(res, "%d,", nominator/denominator);
+        nominator = nominator % denominator;
+        long long common_divisor = find_common_divisor(nominator, denominator);
+        nominator /= common_divisor;
+        denominator /=common_divisor;
+    }
+
+    char *res_operand;
+    while(1) {
+        
+        //write first component of the sum in the form 1/..
+        res_operand = write_operand(ceil((double)denominator / nominator));  //!!! free!!
+        res_length += strlen(res_operand);
+        res = (char *) realloc(res, res_length * sizeof(char));
+        strcat(res, res_operand);
+        free(res_operand);
+
+
+        //calculate second component of the sum
+        long long second_nominator = nominator - (denominator % nominator);
+        if(second_nominator == nominator){
+            res[res_length - 1] = res[res_length - 2] = '\0';
+            return res;
+        }
+        long long second_denominator = denominator * (ceil((double)denominator / nominator));
+        long long common_divisor = find_common_divisor(second_nominator, second_denominator);
+        second_nominator /= common_divisor;
+        second_denominator /= common_divisor;
+
+        if(second_nominator == 1){
+            res_operand = write_operand(second_denominator);
+            res_length += strlen(res_operand);
+            res = (char *) realloc(res, res_length * sizeof(char));
+            strcat(res, res_operand);
+            free(res_operand);
+            res[res_length - 1] = res[res_length-2] = '\0';
+            return res;
+        }
+
+        denominator = second_denominator;
+        nominator = second_nominator;
+
+    }
+}
+
+long long find_common_divisor(long long nominator, long long denominator){
+
+    long long first_number = nominator;
+    long long second_number = denominator;
+
+    if(first_number == second_number)
+        return first_number;
+
+
+    while(first_number != 0 && second_number != 0){
+        if(first_number > second_number)
+            first_number = first_number % second_number;
+        else
+            second_number = second_number % first_number;
+    }
+
+    return first_number + second_number;
+}
+
+char* write_operand(long long number){
+
+    int length = snprintf(NULL, 0, "%d/%d,", 1, number);
+    char* res = calloc(length + 1, sizeof(char));
+    sprintf(res, "%d/%d,", 1, number);
+    res[length] = '\0';
+    return res;
+
+}
