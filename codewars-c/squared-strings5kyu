@@ -1,0 +1,115 @@
+char* clock(char* s) {
+
+    int counter = 1;
+    int index = 0;
+    while(s[index] != '\0'){
+        if(s[index] == '\n')
+            counter++;
+        index++;
+    }
+
+    int length = strlen(s) + 1;
+    char* result = malloc(sizeof(char) * length);
+    result[length-1] = '\0';
+    index = 0;
+    int line_counter = counter*counter-1;
+
+    for(int i = 0; i < strlen(s); i++){
+        for(int j = line_counter; j >= 0; j = j - counter - 1){
+            result[index] = s[i + j];
+            index++;
+        }
+        if(index == length-1)
+            break;
+        result[index] = '\n';
+        index++;
+    }
+
+    return result;
+}
+
+
+
+char* code(char* s) {
+  
+    printf("code: %s\n", s);
+    
+    int substring_length = ceil(sqrt((double)strlen(s)));
+    int total_length = substring_length * (substring_length + 1);
+    char* str = malloc(sizeof(char) * total_length);
+    memset(str, '\0', sizeof(str));
+    memcpy(str, s, strlen(s) * sizeof(char));
+
+    for(int i = strlen(s); i < total_length - 1; i++)
+        str[i] = '\v';
+
+    char* str_with_delim = malloc(sizeof(char) * total_length);
+    memset(str_with_delim, '\0', sizeof(str_with_delim));
+
+    for(int i = 0; i < total_length - substring_length; i += substring_length){
+        strncat(str_with_delim, str + i, sizeof(char) * substring_length);
+        strcat(str_with_delim, "\n");
+    }
+        str_with_delim[total_length-1] = '\0';
+
+    free(str);
+    char* res = clock(str_with_delim);
+    free(str_with_delim);
+    return res;
+    
+}
+
+char* counter(char* strng) {
+
+    int counter = 1;
+    int index = 0;
+    while(strng[index] != '\0'){
+        if(strng[index] == '\n')
+            counter++;
+        index++;
+    }
+
+    char* result = malloc(sizeof(char) * (strlen(strng) + 1));
+    *(result + strlen(strng)) = '\0';
+    int start_index = counter - 1;
+    int delim_pos = counter;
+    for(int i = 0; i < counter-1; i++){
+        result[delim_pos] = '\n';
+        delim_pos += counter+1;
+    }
+
+    index = 0;
+    for(int i = 0; i < counter; i++){
+        for(int j = start_index; j <= strlen(strng); j = j + counter + 1){
+            result[index] = strng[j - i];
+            index++;
+        }
+        index++; //to skip'\n'
+    }
+
+    return result;
+
+}
+
+char* decode(char* s) {
+
+    printf("decode: %s\n", s);
+    char* decoded_str = counter(s);
+    int substring_length = floor((double)sqrt(strlen(s)));
+    int total_length = substring_length * substring_length + 1;
+    char *res = malloc(sizeof(char) * total_length);
+    memset(res, '\0', sizeof(res));
+
+    for(int i = 0; i < strlen(decoded_str); i += (substring_length+1)){
+        strncat(res, decoded_str + i, sizeof(char) * substring_length);
+    }
+
+    for(int i = total_length - substring_length*2; i < total_length; i++){
+        if(res[i] == '\v')
+            res[i] = '\0';
+    }
+
+    free(decoded_str);
+    printf("return:\n%s\n", res);
+    return res;
+}
