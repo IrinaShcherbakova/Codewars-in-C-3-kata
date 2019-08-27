@@ -1,0 +1,39 @@
+int isPrime(long long n){
+    for(long long i = 2; i * i <= n; i++){
+        if(n % i == 0)
+            return 0;
+    }
+    return 1;
+}
+
+long long* gap(int g, long long m, long long n) {
+
+    printf("%lld %lld gap %d\n", m, n, g);
+    long long *res = calloc(2, sizeof(long long));
+    long long prev_number = 0;
+    long long next_number = 0;
+    long long i = m;
+
+    while(i != n){
+        if(isPrime(i)){
+            prev_number = i;
+            break;
+        }
+        i++;
+    }
+
+    while(i != n){
+        if(isPrime(i)){
+            next_number = i;
+            if(next_number - prev_number == g){
+                res[0] = prev_number;
+                res[1] = next_number;
+                return res;
+            }
+            prev_number = next_number;
+        }
+        i++;
+    }
+
+    return res;
+}
