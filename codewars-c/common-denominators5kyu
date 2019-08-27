@@ -1,0 +1,51 @@
+long long find_common_divisor(long long nominator, long long denominator){
+
+    long long first_number = nominator;
+    long long second_number = denominator;
+
+    if(first_number == second_number)
+        return first_number;
+
+
+    while(first_number != 0 && second_number != 0){
+        if(first_number > second_number)
+            first_number = first_number % second_number;
+        else
+            second_number = second_number % first_number;
+    }
+
+    return first_number + second_number;
+}
+
+long long lcm (long long a, long long b){
+
+    return (abs(a * b)) / find_common_divisor(a, b);
+
+}
+
+
+// row: number of rows of lst
+long long (*convertFrac(long long lst[][2], int row))[2] {
+
+    long long (*res)[2] = malloc(row * sizeof(long long) * 2);
+    
+    for(int i = 0; i < row; i++) {
+        //*(res + i)[2] = (long long(*)[2])malloc(2 * sizeof(long long));
+        long long common_divisor = find_common_divisor(lst[i][0], lst[i][1]);
+        *(*(res + i) + 0) = lst[i][0] / common_divisor;
+        *(*(res + i) + 1) = lst[i][1] / common_divisor;
+    }
+
+    long long least_common_multiple = lcm(*(*(res + 0) + 1), *(*(res + 1) + 1));
+    for(int i = 2; i < row; i++){
+        least_common_multiple = lcm(least_common_multiple, *(*(res + i) + 1));
+    }
+
+    for(int i = 0; i < row; i++){
+        *(*(res + i) + 0) = (least_common_multiple / *(*(res + i) + 1)) * (*(*(res + i) + 0));
+        *(*(res + i) + 1) = least_common_multiple;
+    }
+
+    return res;
+}
+
