@@ -1,0 +1,32 @@
+void create_combination(int arr[], int data[], int start, int end, int index, int size, int *max_dist, int desired_dist);
+
+// szls: size of ls
+int chooseBestSum(int t, int k, int ls[], int szls) {  //t - max distance k - towns to visit
+
+    int towns[k];
+    int max_distance = 0;
+    create_combination(ls, towns, 0, szls - 1, 0, k, &max_distance, t);
+
+    return (max_distance == 0 ? -1 : max_distance);
+
+}
+
+void create_combination(int arr[], int data[], int start, int end, int index, int size, int *max_dist, int desired_dist){
+
+    int current_distance = 0;
+    if(index == size){
+        for(int i = 0; i < size; i++)
+            current_distance += data[i];
+
+        int dist = *max_dist;
+        if(current_distance > dist && current_distance <= desired_dist)
+            *max_dist = current_distance;
+        return;
+    }
+
+    for(int i = start; i <= end && end - i + 1 >= size - index; i++){
+        data[index] = arr[i];
+        create_combination(arr, data, i+1, end, index+1, size, max_dist, desired_dist);
+    }
+
+}
