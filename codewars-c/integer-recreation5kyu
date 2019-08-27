@@ -1,0 +1,41 @@
+typedef struct Pair Pair;
+struct Pair {
+    long long first;
+    long long snd;
+};
+
+long long calculate_divisors_sum(long long n){
+
+    long long sum = 0;
+    for(long long i = 1; i * i <= n; i++){
+        if(n % i == 0){
+            if(n / i == i)
+                sum += (i*i);
+            else
+                sum += (i * i + ((n / i) * (n / i)));
+        }
+    }
+    return sum;
+}
+
+
+// fill length with the number of pairs in your array of pairs
+Pair** listSquared(long long m, long long n, int* length) {
+    Pair** arr = malloc(0 * sizeof(Pair*));
+    int size = 0;
+    for(long long i = m; i <= n; i++){
+        long long sum = calculate_divisors_sum(i);
+        long long sum_part = sqrt(sum);
+        if(sum_part * sum_part == sum){
+            arr = (Pair*)realloc(arr, (size + 1) * sizeof(Pair*));
+            arr[size] = malloc(1 * sizeof(Pair));
+            arr[size]->first = i;
+            arr[size]->snd = sum;
+            size++;
+
+        }
+    }
+
+    *length = size;
+    return arr;
+}
