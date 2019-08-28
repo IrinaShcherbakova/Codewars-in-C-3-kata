@@ -1,0 +1,55 @@
+#include <stddef.h>
+
+double find_distance(int a, int b){
+    double result = (double)sqrt(b*b - a*a);
+    return result;
+}
+
+int tour(char** arrFriends, int szArrFriends, char** ftwns, char** townsDist, int szFTwns) {
+
+    int total_distance = 0;
+    int prev_distance = 0;
+    double distance_bwn_towns = 0.0;
+
+    for(int i = 0; i < szArrFriends; i++){
+
+        char* friend = strdup(arrFriends[i]);
+        char* friend_town = NULL;
+        int distance_to_friend = 0;
+        for(int j = 0; j < szFTwns; j++){
+            if(!strcmp(friend, ftwns[j])){
+                friend_town = strdup(ftwns[j+1]);
+                break;
+            }
+        }
+
+        if(friend_town == NULL){
+            free(friend);
+            total_distance += prev_distance; //to return back to granny
+            prev_distance = 0;
+            continue;
+        }
+
+        for(int j = 0; j < szFTwns; j++){
+            if(!strcmp(friend_town, townsDist[j])){
+                distance_to_friend = strtol(townsDist[j+1], NULL, 10);
+                break;
+            }
+        }
+
+        if(i == 0)
+            total_distance += distance_to_friend;
+        else
+            distance_bwn_towns += find_distance(prev_distance, distance_to_friend);
+
+        prev_distance = distance_to_friend;
+        free(friend);
+        free(friend_town);
+    }
+
+    total_distance += prev_distance; //to return back to granny
+    total_distance += floor(distance_bwn_towns);
+    return total_distance;
+}
+
+
