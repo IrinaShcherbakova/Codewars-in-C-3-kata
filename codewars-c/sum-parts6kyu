@@ -1,0 +1,19 @@
+#include <stdlib.h>
+
+/* Note:
+    should also save the length of the parst sums in <len>
+*/
+
+unsigned long long *parts_sums(size_t *len, const unsigned long long *ls, size_t n)
+{
+    size_t length = n + 1;
+    unsigned long long *res = malloc(sizeof(unsigned long long) * length);
+    res[length - 1] = 0;
+    
+    for(int i = length - 2; i >= 0; i--){
+        res[i] = res[i + 1] + ls[i];
+    }
+    
+    *len = length;
+    return res;
+}
