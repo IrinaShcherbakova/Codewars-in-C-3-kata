@@ -1,0 +1,32 @@
+#include <stddef.h>
+// sz1: size of array1, sz2: size of array2, lg: size of the returned array
+char** inArray(char* array1[], int sz1, char* array2[], int sz2, int* lg) {
+    char** res = malloc(0 * sizeof(char*));
+    int res_size = 0;
+
+    for(int i = 0; i < sz1; i++){
+        char* ptr = NULL;
+        for(int j = 0; j < sz2; j++){
+            ptr = strstr(array2[j], array1[i]);
+            if(ptr != NULL){
+                res = (char**)realloc(res, (res_size + 1) * sizeof(char*));
+                res[res_size] = strdup(array1[i]);
+                res_size++;
+                break;
+            }
+        }
+    }
+
+    for(int i = 0; i < res_size - 1; i++){
+        for(int j = 0; j < res_size - i - 1; j++){
+            int compare = strcmp(res[j], res[j+1]);
+            if(compare > 0){
+                char* temp = res[j];
+                res[j] = res[j+1];
+                res[j+1] = temp;
+            }
+        }
+    }
+    *lg = res_size;
+    return res;
+}
