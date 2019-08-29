@@ -1,0 +1,22 @@
+// Returns number of complete beeramid levels
+int beeramid(double bonus, double price) {
+    int levels = 0;
+    int beers_at_level = 0;
+    int beers = 1;
+    while(bonus > 0){
+
+        beers_at_level = pow(beers, 2);
+        bonus = bonus - beers_at_level * price;
+        if(bonus >= 0){
+            levels++;
+            beers++;
+            continue;
+        }
+
+        else
+            return levels;
+    }
+
+    return levels;
+
+}
