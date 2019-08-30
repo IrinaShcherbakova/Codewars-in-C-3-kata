@@ -2,3 +2,13 @@ SELECT age, COUNT(*) as total_people
 FROM people
 GROUP BY age
 HAVING COUNT(*) >= 10
+
+*************************************************
+
+SELECT d.id, d.name
+FROM departments d
+WHERE EXISTS (SELECT *
+              FROM sales s
+              WHERE d.id = s.department_id AND s.price > 98.00)
+
+****************************************************
