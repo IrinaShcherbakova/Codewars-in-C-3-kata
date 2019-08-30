@@ -21,4 +21,57 @@ FROM students
 WHERE tuition_received = false 
 
 ************************************************
+Employees
+
+SELECT *
+FROM companies
+ORDER BY employees DESC
+****************************************************
+Min/max age
+
+SELECT MIN(age) as age_min, MAX(age) as age_max
+FROM people
+
+*************************************************
+Sum ages
+
+SELECT SUM(age) as age_sum
+FROM people
+
+*******************************************************
+
+SELECT *
+FROM people
+WHERE age > 50
+
+**********************************************************
+
+SELECT DISTINCT age
+FROM people
+
+******************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
