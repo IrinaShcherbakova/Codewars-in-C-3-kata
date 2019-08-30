@@ -1,0 +1,9 @@
+******adults only*****
+SELECT name, age
+FROM users 
+WHERE age >= 18
+
+******************select country**************
+SELECT name, country
+FROM travelers
+WHERE (country <> 'Canada') AND (country <> 'USA') AND (country <> 'Mexico')
