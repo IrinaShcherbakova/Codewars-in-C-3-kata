@@ -1,9 +1,23 @@
-******adults only*****
+*****************************
+Adults only
+
 SELECT name, age
 FROM users 
 WHERE age >= 18
 
-******************select country**************
+************************************************
+Select country
+
 SELECT name, country
 FROM travelers
 WHERE (country <> 'Canada') AND (country <> 'USA') AND (country <> 'Mexico')
+
+
+**********************************
+Tuition received
+
+SELECT *
+FROM students
+WHERE tuition_received = false 
+
+************************************************
