@@ -1,0 +1,16 @@
+#include <stddef.h>
+int digPow(int n, int p) {
+    int length = snprintf(NULL, 0, "%d", n);
+    p = p + length - 1;
+    int number = n;
+    int sum = 0;
+
+    while(number > 0){
+        int remainder = number % 10;
+        sum += pow(remainder, p);
+        p--;
+        number /= 10;
+    }
+
+    return (sum % n == 0 ? sum / n : -1);
+}
