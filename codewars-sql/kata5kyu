@@ -1,0 +1,10 @@
+SELECT title
+FROM film
+WHERE film_id IN (SELECT f1.film_id
+                  FROM film_actor f1, film_actor f2
+                  WHERE f1.actor_id = 105 AND f2.actor_id = 122 AND
+                        f1.film_id = f2.film_id)
+ORDER BY title asc
+
+
+***************************************************************
