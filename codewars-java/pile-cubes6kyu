@@ -1,0 +1,15 @@
+public class ASum {
+	
+	public static long findNb(long m) {
+		    System.out.println(m);
+        long start = 1;
+        long sum = 0;
+
+        while(sum < m){
+            sum = sum + (long)Math.pow(start, 3);
+            start++;
+        }
+
+        return (sum == m ? start - 1 : -1);
+	}	
+}
