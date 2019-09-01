@@ -1,0 +1,56 @@
+class Rank {
+    
+    public static String nthRank(String st, Integer[] we, int n) {
+
+        if(st.length() == 0)
+            return "No participants";
+
+        String[] tokens = st.split(",");
+        if(n > tokens.length)
+            return "Not enough participants";
+
+        int[] ranks = new int[tokens.length];
+        for(int i = 0; i < tokens.length; i++){
+            ranks[i] = winning_number(tokens[i]) * we[i];
+        }
+
+        for(int i = 0; i < tokens.length - 1; i++){
+            for(int j = 0; j < tokens.length - i - 1; j++){
+                if(ranks[j] < ranks[j+1]){
+                    int temp = ranks[j];
+                    ranks[j] = ranks[j+1];
+                    ranks[j+1] = temp;
+                    String name = tokens[j];
+                    tokens[j] = tokens[j+1];
+                    tokens[j+1] = name;
+                }
+
+                if(ranks[j] == ranks[j+1]){
+                    int index = 0;
+                    while(Character.toLowerCase(tokens[j].charAt(index)) ==
+                            Character.toLowerCase(tokens[j+1].charAt(index)))
+                        index++;
+                    if(Character.toLowerCase(tokens[j].charAt(index)) >
+                            Character.toLowerCase(tokens[j+1].charAt(index))){
+                        String name = tokens[j];
+                        tokens[j] = tokens[j+1];
+                        tokens[j+1] = name;
+                    }
+                }
+            }
+        }
+
+        return tokens[n-1];
+    }
+
+    static int winning_number(String str){
+
+        int sum = str.length();
+        for(int i = 0; i < str.length(); i++){
+            char ch = Character.toLowerCase(str.charAt(i));
+            sum += ((int)ch - 96);
+        }
+
+        return sum;
+    }
+}
