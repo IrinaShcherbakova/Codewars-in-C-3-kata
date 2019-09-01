@@ -1,0 +1,72 @@
+#include <stddef.h>
+int winning_number(char* str){
+    int win = strlen(str);
+    for(int i = 0; i < strlen(str); i++){
+        int value = tolower(str[i]) - 96;
+        win += value;
+    }
+    return win;
+}
+
+char* nthRank(char* st, int* we, int n) {
+  if(strlen(st) == 0)
+        return "No participants";
+
+    int *ranks = malloc(0 * sizeof(int));
+    char **participants = malloc(0 * sizeof(char*));
+    int size = 0;
+    char *input = strdup(st);
+    char* token = strtok(input, ",");
+
+    while(token != NULL){
+        ranks = (int*)realloc(ranks, (size + 1) * sizeof(int));
+        participants = (char**)realloc(participants, (size+1) * sizeof(char*));
+        participants[size] = strdup(token);
+        ranks[size] = winning_number(token) * we[size];
+        size++;
+        token = strtok(NULL, ",");
+    }
+
+    if(n > size){
+        for(int i = 0; i < size; i++)
+            free(participants[i]);
+
+        free(input);
+        free(participants);
+        free(ranks);
+        return "Not enough participants";
+    }
+
+    for(int i = 0; i < size - 1; i++){
+        for(int j = 0; j < size - 1 - i; j++){
+            if(ranks[j] < ranks[j + 1]){
+                int rank_temp = ranks[j];
+                ranks[j] = ranks[j+1];
+                ranks[j+1] = rank_temp;
+                char* name_temp = participants[j];
+                participants[j] = participants[j+1];
+                participants[j+1] = name_temp;
+            }
+
+            if(ranks[j] == ranks[j + 1]){
+                int index = 0;
+                while(tolower(participants[j][index]) == tolower(participants[j+1][index]))
+                    index++;
+                if(tolower(participants[j][index]) > tolower(participants[j+1][index])){
+                    char* name_temp = participants[j];
+                    participants[j] = participants[j+1];
+                    participants[j+1] = name_temp;
+                }
+            }
+        }
+    }
+
+    char *res = strdup(participants[n-1]);
+    for(int i = 0; i < size; i++)
+        free(participants[i]);
+
+    free(input);
+    free(participants);
+    free(ranks);
+    return res;
+}
