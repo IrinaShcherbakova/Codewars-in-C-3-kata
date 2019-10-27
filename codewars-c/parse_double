@@ -1,0 +1,65 @@
+void to_decimal(int* array, int length, char* string);
+char *expandedForm(double n){
+
+    int string_length = snprintf(NULL, 0, "%f", n);
+    char* string = malloc(sizeof(char) * (string_length+1));
+    memset(string, '\0', sizeof(string));
+    sprintf(string, "%f", n);
+    char* result = malloc(sizeof(char) * 100);
+    memset(result, '\0', sizeof(result));
+    int dot = 0;
+    long denominator = 1;
+    int* number_before_dot = malloc(sizeof(int) * 0);
+    int number_length = 0;
+
+    for(int i = 0; i < strlen(string); i++){
+
+        if(string[i] == '.'){
+            dot = 1;
+            to_decimal(number_before_dot, number_length, result);
+            continue;
+        }
+
+        if(dot == 1){
+            denominator *= 10;
+            if(string[i] == '0')
+                continue;
+            int digit = string[i] - '0';
+            sprintf(result + strlen(result), "%d/%ld", digit, denominator);
+            if(strlen(result) > 0)
+                strcat(result, " + ");
+        }
+        else{
+            number_before_dot = (int*)realloc(number_before_dot, (number_length + 1)*sizeof(int));
+            number_length++;
+            number_before_dot[number_length-1] = string[i] - '0';
+        }
+
+    }
+
+    result[strlen(result) - 2] = '\0';
+    free(number_before_dot);
+    free(string);
+    return result;
+}
+
+void to_decimal(int* array, int length, char* string){
+
+    long multiple = 1;
+    for(int i = 1; i < length; i++){
+        multiple *= 10;
+    }
+
+    for(int i = 0; i < length; i++){
+        if(array[i] == 0){
+            multiple /= 10;
+            continue;
+        }
+        long number = array[i] * multiple;
+        sprintf(string + strlen(string), "%ld", number);
+        multiple /= 10;
+        strcat(string, " + ");
+    }
+
+}
+
