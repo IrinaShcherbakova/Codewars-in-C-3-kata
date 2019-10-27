@@ -1,0 +1,19 @@
+bool permute_a_palindrome(const char *str_in) {
+
+    int letters[26] = {0};
+    bool foundOdd = false;
+
+    for(int i = 0; i < strlen(str_in); i++){
+        letters[str_in[i] - 97]++;
+    }
+
+    for(int i = 0; i < 26; i++) {
+        if (letters[i] % 2 == 1) {
+            if (foundOdd)
+                return false;
+            foundOdd = true;
+        }
+    }
+
+    return true;
+}
